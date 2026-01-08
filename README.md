@@ -1,35 +1,35 @@
-# MongoDB Distribuït: Replica Set amb Àrbitre i Clúster Sharded
+# MongoDB Distribuido: Replica Set con Árbitro y Clúster Sharded
 
-![Portada del projecte](cover.png)
+![Portada del proyecto](cover.png)
 
-## Descripció del Projecte
-Projecte personal d’**Administració de Sistemes i Bases de Dades** centrat en la configuració avançada d’un **entorn MongoDB distribuït**, orientat a **alta disponibilitat** i **escalabilitat horitzontal**, simulant un entorn de producció real en local.
+## Descripción del Proyecto
+Proyecto personal de **Administración de Sistemas y Bases de Datos** centrado en la configuración avanzada de un **entorno MongoDB distribuido**, orientado a **alta disponibilidad** y **escalabilidad horizontal**, simulando un entorno de producción real en local.
 
-L’objectiu del projecte és entendre i aplicar conceptes reals d’arquitectura distribuïda utilitzats en entorns empresarials, sense necessitat de múltiples màquines físiques.
+El objetivo del proyecto es comprender y aplicar conceptos reales de arquitectura distribuida utilizados en entornos empresariales, sin necesidad de disponer de múltiples máquinas físicas.
 
 ---
 
-## Característiques Principals
-- **Replica Set** amb 3 nodes (1 primari + 2 secundaris).
-- **Àrbitre** per millorar les eleccions sense emmagatzemar dades.
-- **Clúster Sharded complet** amb:
+## Características Principales
+- **Replica Set** con 3 nodos (1 primario + 2 secundarios).
+- **Árbitro** para mejorar las elecciones sin almacenar datos.
+- **Clúster Sharded completo**, con:
   - Config Servers en Replica Set.
-  - Shards independents.
+  - Shards independientes.
   - Router `mongos`.
-- Activació de sharding en base de dades i col·lecció amb **clau hashed**.
-- Inserció massiva de dades de prova.
-- Verificació del balançament i distribució de dades.
-- Entorn **100% reproduïble en local** mitjançant ports diferenciats (Windows + PowerShell).
+- Activación del sharding en base de datos y colección con **clave hashed**.
+- Inserción masiva de datos de prueba.
+- Verificación del balanceo y distribución de datos.
+- Entorno **100% reproducible en local** mediante puertos diferenciados (Windows + PowerShell).
 
 ---
 
-## Tecnologies i Eines Utilitzades
+## Tecnologías y Herramientas Utilizadas
 - **MongoDB**
   - `mongod`
   - `mongos`
   - `mongosh`
 - **PowerShell**
-- Comandes principals:
+- Comandos principales:
   - `rs.initiate()`
   - `rs.add()`
   - `rs.addArb()`
@@ -42,102 +42,102 @@ L’objectiu del projecte és entendre i aplicar conceptes reals d’arquitectur
 
 ---
 
-## Objectius Aconseguits
-- Alta disponibilitat mitjançant **replicació automàtica**.
-- Gestió de **failover** i eleccions de primari.
-- Escalabilitat horitzontal real amb sharding.
+## Objetivos Alcanzados
+- Alta disponibilidad mediante **replicación automática**.
+- Gestión de **failover** y elecciones de primario.
+- Escalabilidad horizontal real mediante sharding.
 - Arquitectura MongoDB completa simulada en local.
-- Validació del funcionament del clúster distribuït.
+- Validación del correcto funcionamiento del clúster distribuido.
 
 ---
 
-## Arquitectura del Projecte
+## Arquitectura del Proyecto
 
 ### Replica Set
-- 3 nodes de dades:
-  - 1 Primari
-  - 2 Secundaris
-- 1 Àrbitre:
-  - No emmagatzema dades.
-  - Participa únicament en eleccions.
+- 3 nodos de datos:
+  - 1 Primario
+  - 2 Secundarios
+- 1 Árbitro:
+  - No almacena datos.
+  - Participa únicamente en las elecciones.
 
 ### Clúster Sharded
 - **Config Servers** (Replica Set):
-  - Emmagatzemen la configuració del clúster.
+  - Almacenan la configuración del clúster.
 - **Shards**:
-  - Nodes independents que contenen les dades.
+  - Nodos independientes que contienen los datos.
 - **mongos**:
-  - Router que rep les consultes del client i les distribueix als shards corresponents.
+  - Router que recibe las peticiones del cliente y las distribuye a los shards correspondientes.
 
 ---
 
-## Procés de Configuració (Resum)
+## Proceso de Configuración (Resumen)
 
-### 1. Configuració del Replica Set
-- Creació de carpetes de persistència.
-- Inici de múltiples instàncies `mongod` amb ports diferents.
-- Inicialització del Replica Set.
-- Afegit dels nodes secundaris.
-- Verificació amb `rs.status()`.
+### 1. Configuración del Replica Set
+- Creación de carpetas de persistencia.
+- Inicio de múltiples instancias `mongod` con puertos distintos.
+- Inicialización del Replica Set.
+- Añadido de los nodos secundarios.
+- Verificación mediante `rs.status()`.
 
-### 2. Afegit de l’Àrbitre
-- Creació d’un node dedicat.
-- Afegit al Replica Set amb `rs.addArb()`.
-- Comprovació del funcionament d’eleccions i failover.
+### 2. Añadido del Árbitro
+- Creación de un nodo dedicado.
+- Incorporación al Replica Set con `rs.addArb()`.
+- Comprobación del funcionamiento de elecciones y failover.
 
-### 3. Configuració del Clúster Sharded
-- Creació dels Config Servers en Replica Set.
-- Inicialització del Replica Set de configuració.
-- Creació i inici dels shards.
-- Inici del router `mongos`.
-- Afegit dels shards al clúster.
+### 3. Configuración del Clúster Sharded
+- Creación de los Config Servers en Replica Set.
+- Inicialización del Replica Set de configuración.
+- Creación e inicio de los shards.
+- Inicio del router `mongos`.
+- Añadido de los shards al clúster.
 
-### 4. Sharding i Dades
-- Activació del sharding a la base de dades.
-- Fragmentació de la col·lecció amb clau `_id` hashed.
-- Inserció de **10.000 documents** de prova.
-- Verificació de la distribució de chunks entre shards.
-
----
-
-## Verificació i Validació
-- Estat del Replica Set amb `rs.status()`.
-- Estat del clúster amb `sh.status()`.
-- Distribució real de dades amb `getShardDistribution()`.
-
-Aquestes comprovacions confirmen que:
-- El balançador funciona correctament.
-- Les dades estan repartides entre shards.
-- El clúster és funcional i estable.
+### 4. Sharding y Datos
+- Activación del sharding en la base de datos.
+- Fragmentación de la colección con clave `_id` hashed.
+- Inserción de **10.000 documentos** de prueba.
+- Verificación de la distribución de chunks entre shards.
 
 ---
 
-## Aprenentatges Clau
-- Funcionament intern dels **Replica Sets**.
-- Gestió d’eleccions i àrbitres.
-- **Sharding** i distribució de dades amb clau hashed.
-- Arquitectura distribuïda aplicada en entorn local.
-- Verificació i troubleshooting en MongoDB.
+## Verificación y Validación
+- Estado del Replica Set con `rs.status()`.
+- Estado del clúster con `sh.status()`.
+- Distribución real de los datos con `getShardDistribution()`.
+
+Estas comprobaciones confirman que:
+- El balanceador funciona correctamente.
+- Los datos están repartidos entre los shards.
+- El clúster es estable y funcional.
 
 ---
 
-## Rellevància Professional
-Projecte alineat amb competències clau en:
-- **Big Data i NoSQL**.
+## Aprendizajes Clave
+- Funcionamiento interno de los **Replica Sets**.
+- Gestión de elecciones y uso de árbitros.
+- **Sharding** y distribución de datos mediante clave hashed.
+- Arquitectura distribuida aplicada en entorno local.
+- Verificación y troubleshooting en MongoDB.
+
+---
+
+## Relevancia Profesional
+Proyecto alineado con competencias clave en:
+- **Big Data y NoSQL**.
 - **Cloud** (MongoDB Atlas, Amazon DocumentDB).
-- **DevOps** i arquitectures escalables.
-- Administració de sistemes i bases de dades distribuïdes.
+- **DevOps** y arquitecturas escalables.
+- Administración de sistemas y bases de datos distribuidas.
 
 ---
 
-## Conclusió
-Projecte complet i funcional de **MongoDB distribuït**, pensat per entendre arquitectures reals utilitzades en entorns professionals i preparat per escalar.
+## Conclusión
+Proyecto completo y funcional de **MongoDB distribuido**, pensado para comprender arquitecturas reales utilizadas en entornos profesionales y preparado para escalar.
 
-⭐ Si t’interessen les bases de dades distribuïdes, dona-li una estrella al repositori!
+⭐ Si te interesan las bases de datos distribuidas, ¡dale una estrella al repositorio!
 
 ---
 
-## Captures del Procés Complet
+## Capturas del Proceso Completo
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; margin: 30px 0;">
 
@@ -184,4 +184,4 @@ Projecte complet i funcional de **MongoDB distribuït**, pensat per entendre arq
 ---
 
 **Autor**: Pau Olivé Moreno  
-**Data**: Principis de 2025
+**Fecha**: Principios de 2025
